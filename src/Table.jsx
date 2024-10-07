@@ -39,16 +39,38 @@ setSortData({key , direction});
   })
   setFilterData(sortData);
 };
+// Handle Edit functionality
+const handleEdit = (index) => {
+  const updatedData = [...filterData];
+  updatedData[index].isEditing = !updatedData[index].isEditing;
+  setFilterData(updatedData);
+  setSaveData(updatedData);
+  localStorage.setItem('formData', JSON.stringify(updatedData)); // Persist changes to localStorage
+};
+ // Handle Input Change for editing
+ const handleInputChange = (index, field, newValue) => {
+  const updatedData = [...filterData];
+  updatedData[index][field] = newValue;
+  setFilterData(updatedData);
+};
+
+// Handle Delete functionality
+const handleDelete = (index) => {
+  const updatedData = filterData.filter((_, i) => i !== index);
+  setFilterData(updatedData);
+  setSaveData(updatedData);
+  localStorage.setItem('formData', JSON.stringify(updatedData)); // Update localStorage
+};
 
   return (
     <div className='table'>
      <div className="tablefirst">
-      <input
+      {/* <input
         type="text"
         value={serchTherm}
-        onChange={handleSearch}
+        onChange={(e) => handleInputChange(index, 'firstname', e.target.value)}
         placeholder="Search by firstname or email"  
-      />
+      /> */}
 
       <table id='table'>
         <thead >
@@ -69,23 +91,91 @@ setSortData({key , direction});
              <th onClick={()=>handlesort('subject')}>
              Subject{}
              </th>
+             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
         {filterData.length > 0 ? (
             filterData.map((data, index) => (
               <tr key={index}>
-                <td >{data.firstname}</td>
-                <td >{data.lastname}</td>
-                <td >{data.email}</td>
-                <td >{data.gender}</td>
-                <td >{data.subject}</td>
+                <td>
+                    {data.isEditing ? (
+                      <input
+                        type="text"
+                        value={data.firstname}
+                        onChange={(e) => handleInputChange(index, 'firstname', e.target.value)}
+                      />
+                    ) : (
+                      data.firstname
+                    )}
+                  </td>
+                  <td>
+                    {data.isEditing ? (
+                      <input
+                        type="text"
+                        value={data.lastname}
+                        onChange={(e) => handleInputChange(index, 'lastname', e.target.value)}
+                      />
+                    ) : (
+                      data.lastname
+                    )}
+                  </td>
+                  <td>
+                    {data.isEditing ? (
+                      <input
+                        type="text"
+                        value={data.email}
+                        onChange={(e) => handleInputChange(index, 'email', e.target.value)}
+                      />
+                    ) : (
+                      data.email
+                    )}
+                  </td>
+                  <td>
+                    {data.isEditing ? (
+                      <input
+                        type="text"
+                        value={data.gender}
+                        onChange={(e) => handleInputChange(index, 'gender', e.target.value)}
+                      />
+                    ) : (
+                      data.gender
+                    )}
+                  </td>
+                  <td>
+                    {data.isEditing ? (
+                      <input
+                        type="text"
+                        value={data.subject}
+                        onChange={(e) => handleInputChange(index, 'subject', e.target.value)}
+                      />
+                    ) : (
+                      data.subject
+                    )}
+                  </td>
+                  <td>
+                  <div className="tablebutton">
+                  <div className="del"  onClick={() => handleEdit(index)}>
+                           <div>
+                           {data.isEditing ? 'Save' : 'Edit'}
+                           </div>     
+                        </div>
+                    {/* <button onClick={() => handleEdit(index)}>
+                      {data.isEditing ? 'Save' : 'Edit'}
+                    </button> */}
+                    <div className="del" onClick={() => handleDelete(index)}>
+                           <div>
+                              Delete
+                           </div>     
+                        </div>
+                        </div>
+                  </td>
               </tr>
             ))
           ) : (
             <tr>
               <td>
-                No data available
+              <td colSpan="4">No data available</td>
               </td>
             </tr>
           )}

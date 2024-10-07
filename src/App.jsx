@@ -1,7 +1,6 @@
 import Form from './Form'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Table from "./table";
-
 import './App.css'
 
 function App() {

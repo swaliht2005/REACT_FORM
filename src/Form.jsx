@@ -22,6 +22,7 @@ function Form() {
     console.log(updatedData);
     navigate('/table');
   };
+  
 
   return (
     <div className='container'>
@@ -34,6 +35,7 @@ function Form() {
             placeholder='Enter First Name'
             name='firstname'
             {...register('firstname', { required: true, minLength: 6 })}
+          
           />
           {errors.firstname && <p>First name is required (6 characters)</p>}<br /><br />
 
